@@ -8,7 +8,7 @@ const options = {dbName: "digipedia"};
 module.exports = ()=> mongoose.connect(uri, options);
 /* Esto es lo mismo que lo de arriba pero con mas codigo
 const connection = ()=> {
-    mongoose.connect(uri, {userNewUrlParse: true, useUnifiedTopology: true});
+    mongoose.connect(uri, options);
 }
 module.exports = connection;
 */

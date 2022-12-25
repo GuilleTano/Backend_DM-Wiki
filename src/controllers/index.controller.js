@@ -13,12 +13,41 @@ controller.index = async (req, res) =>{
         const allDigimons = await DigiModel.find();
 
         console.log(allDigimons);
-
         
         res.send("<h1>Servidor corriendo</h1>");
     }catch(err){
         console.error(err);
     }
 }
+
+controller.addDigimonsToBD = async (req, res) => {
+    try {
+      const { name, id, xAntibody, releaseDate, images, levels, fields, 
+        attributes, description, skills, type, priorEvolutions, nextEvolutions} = req.body;
+      const body = {
+        name: name,
+        id: id,
+        type: type,
+        xAntibody: xAntibody,
+        releaseDate: releaseDate,
+        images: images,
+        levels: levels,
+        fields: fields,
+        attributes: attributes,
+        description: description,
+        skills: skills,
+        priorEvolutions: priorEvolutions,
+        nextEvolutions: nextEvolutions
+      };
+      await connection();
+
+      await DigiModel.create(body);
+      //res.redirect('/');
+
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
 module.exports = controller;
