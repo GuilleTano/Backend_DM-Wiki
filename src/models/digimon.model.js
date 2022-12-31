@@ -3,13 +3,22 @@ const mongoose = require("mongoose");
 const {Schema} = mongoose; //Es lo mismo que lo de arriba pero desestructurado
 
 //Schema crea el esquema o la forma que tendran los datos de la base de datos
-//En este ejemplo, como el dato de la BD tiene solo el parametro name (que es un string), solo ponemos ese
+
 const DigiSchema = new Schema({
     id: Number,
     name: String,
-    type: String,
     xAntibody: Boolean,
     releaseDate: String,
+    types:[{
+        id: {
+          type: Number,
+          required: true
+        },
+        type: {
+          type: String,
+          required: true
+        }
+      }],
     images: [{
         href: String,
         transparent: Boolean
