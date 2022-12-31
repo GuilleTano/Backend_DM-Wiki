@@ -22,7 +22,7 @@ controller.index = async (req, res) =>{
 
 controller.addDigimonsToBD = async (req, res) => {
     try {
-      const { name, id, xAntibody, releaseDate, images, levels, fields, 
+      const { name, id, xAntibody, releaseDate, image, levels, fields, 
         attributes, description, skills, types, priorEvolutions, nextEvolutions} = req.body;
       const body = {
         name: name,
@@ -30,7 +30,7 @@ controller.addDigimonsToBD = async (req, res) => {
         types: types,
         xAntibody: xAntibody,
         releaseDate: releaseDate,
-        images: images,
+        image: image,
         levels: levels,
         fields: fields,
         attributes: attributes,
