@@ -1,5 +1,5 @@
 require("dotenv").config();
-const AWS = require("@aws-sdk/client-s3");
+const AWS = require("aws-sdk");
 
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME
 const AWS_BUCKET_REGION = process.env.AWS_BUCKET_REGION
@@ -8,13 +8,16 @@ const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY
 
 // Configurar la autenticación de AWS con tu clave de acceso y clave secreta
 AWS.config.update({
+  region: AWS_BUCKET_REGION,
   accessKeyId: AWS_PUBLIC_KEY,
   secretAccessKey: AWS_SECRET_KEY
 });
 
 // Crear una instancia de S3
-const s3 = new AWS.S3();
+const s3 = new AWS.S3({params: {Bucket: AWS_BUCKET_NAME}});
 
+
+/*ESTO YA ESTA EN CONTROLLER
 // La imagen en formato base64
 const base64Image = 'TU_IMAGEN_EN_BASE64';
 
@@ -37,9 +40,9 @@ s3.upload(params, function(err, data) {
     console.log(data);
   }
 });
+*/
 
-
-
+module.exports = s3;
 
 /* TUTORIAL DE YOUTUBE
 require("dotenv").config();
