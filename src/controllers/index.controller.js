@@ -50,26 +50,21 @@ controller.addDigimonsToBD = async (req, res) => {
     } catch (err) {
       console.error(err);
     }
-  };
+};
 
 
-controller.sendImageToAWS = async (req, res) => {
+controller.sendImagesToAWS = async (req, res) => {
   try {
 
-    // La imagen en formato base64 se encuentra en el cuerpo de la solicitud
-    //const base64Image = req.body.image;
-
-    // Convertir la imagen en base64 a un buffer para poder enviarla a S3
-    //const buffer = Buffer.from(base64Image, 'base64');
     const nameImage = "Agumon";
     const blobImage = req.body;
     console.log(blobImage);
 
     // Configurar los parámetros para enviar la imagen al bucket
     const params = {
-      Bucket: s3.bucketName, //Nombre del bucket
+      //Bucket: s3.bucketName, //Nombre del bucket
       Key: `${nameImage}.png`, // El nombre que quieres darle a la imagen en S3 | Puedo enviar el nombre con la imagen en body
-      Body: blobImage, //buffer,
+      Body: blobImage,
       ContentType: 'image/png' // El tipo de contenido de la imagen
     };
 
@@ -81,7 +76,7 @@ controller.sendImageToAWS = async (req, res) => {
       }
 
       // Enviar una respuesta al cliente indicando que la imagen se ha subido correctamente
-      //res.send({ message: 'Imagen subida correctamente' });
+      res.send({ message: 'Imagen subida correctamente' });
     });
 
   }

@@ -16,7 +16,7 @@ AWS.config.update({
 // Crear una instancia de S3
 const s3 = new AWS.S3({params: {Bucket: AWS_BUCKET_NAME}});
 
-
+module.exports = s3;
 /*ESTO YA ESTA EN CONTROLLER
 // La imagen en formato base64
 const base64Image = 'TU_IMAGEN_EN_BASE64';
@@ -42,7 +42,7 @@ s3.upload(params, function(err, data) {
 });
 */
 
-module.exports = s3;
+//module.exports = s3;
 
 /* TUTORIAL DE YOUTUBE
 require("dotenv").config();

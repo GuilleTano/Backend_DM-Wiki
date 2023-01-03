@@ -12,7 +12,7 @@ router.get("/", controller.index);
 router.post('/add-digimon-to-BD', controller.addDigimonsToBD);
 
 // POST PARA ENVIAR LAS IMAGENES A AWS
-router.post('/images', controller.sendImageToAWS);
+router.post('/images-to-AWS', controller.sendImagesToAWS);
 
 
 module.exports = router;
