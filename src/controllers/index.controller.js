@@ -84,7 +84,7 @@ controller.sendImagesToAWS = async (req, res) => {
         console.log('Error', err);
       }
       if (data) {
-        console.log('Subido correctamente', data.Location);
+        console.log('Subido correctamente');
       }
     });
 
