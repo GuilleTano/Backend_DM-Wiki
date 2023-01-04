@@ -6,7 +6,10 @@ const controller = {};
 const connection = require("../dbConnection/connection");
 const DigiModel = require("../models/digimon.model");
 const s3 = require("../s3config/s3connection") //Llamar a la conexion con s3
-
+const { PutObjectCommand } = require('@aws-sdk/client-s3');
+const fs = require('fs');
+require("dotenv").config();
+const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME
 
 controller.index = async (req, res) =>{
 
@@ -56,6 +59,57 @@ controller.addDigimonsToBD = async (req, res) => {
 controller.sendImagesToAWS = async (req, res) => {
   try {
 
+    // Obtiene el nombre del archivo y el contenido del archivo a partir de la petición
+    const fileName = "Agumon.png";
+    const fileBlob = req.body;
+
+    // Convierte el objeto blob a un string
+    const fileBlobString = JSON.stringify(fileBlob);
+
+    // Crea un buffer a partir del blob
+    const fileBuffer = Buffer.from(fileBlobString, 'utf8');
+    console.log(fileBuffer);
+
+    // Prepara los parámetros para la subida del archivo a S3
+    const params = {
+      Bucket: AWS_BUCKET_NAME,
+      Key: fileName,
+      Body: fileBuffer
+    };
+
+    const command = new PutObjectCommand(params);
+
+    s3.send(command, function(err, data) {
+      if (err) {
+        console.log('Error', err);
+      }
+      if (data) {
+        console.log('Subido correctamente', data.Location);
+      }
+    });
+
+    /*
+    s3.upload(params, function (err, data) {
+      if (err) {
+        // Enviar un mensaje de error al cliente si hubo un problema
+        return res.status(500).send(err);
+      }
+
+      // Enviar una respuesta al cliente indicando que la imagen se ha subido correctamente
+      res.send({ message: 'Imagen subida correctamente' });
+    });
+  */
+
+  }
+  catch (err) {
+    console.error(err);
+  }
+};
+
+/*
+controller.sendImagesToAWS = async (req, res) => {
+  try {
+
     const nameImage = "Agumon";
     const blobImage = req.body;
     console.log(blobImage);
@@ -84,6 +138,6 @@ controller.sendImagesToAWS = async (req, res) => {
     console.error(err);
   }
 };
-
+*/
 
 module.exports = controller;
