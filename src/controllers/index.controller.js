@@ -6,7 +6,10 @@ const controller = {};
 const connection = require("../dbConnection/connection");
 const DigiModel = require("../models/digimon.model");
 const s3 = require("../s3config/s3connection") //Llamar a la conexion con s3
+
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
+const { GetObjectCommand } = require('@aws-sdk/client-s3');
+
 const fs = require('fs');
 require("dotenv").config();
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME
@@ -67,8 +70,8 @@ controller.sendImagesToAWS = async (req, res) => {
     const fileBlobString = JSON.stringify(fileBlob);
 
     // Crea un buffer a partir del blob
-    const fileBuffer = Buffer.from(fileBlobString, 'utf8');
-    console.log(fileBuffer);
+    const fileBuffer = Buffer.from(fileBlobString);
+    //console.log(fileBuffer);
 
     // Prepara los parámetros para la subida del archivo a S3
     const params = {
@@ -88,56 +91,50 @@ controller.sendImagesToAWS = async (req, res) => {
       }
     });
 
-    /*
-    s3.upload(params, function (err, data) {
-      if (err) {
-        // Enviar un mensaje de error al cliente si hubo un problema
-        return res.status(500).send(err);
-      }
-
-      // Enviar una respuesta al cliente indicando que la imagen se ha subido correctamente
-      res.send({ message: 'Imagen subida correctamente' });
-    });
-  */
-
   }
   catch (err) {
     console.error(err);
   }
 };
 
-/*
-controller.sendImagesToAWS = async (req, res) => {
-  try {
+controller.getImagesToAWS = async (req, res) => {
 
-    const nameImage = "Agumon";
-    const blobImage = req.body;
-    console.log(blobImage);
+  try{
 
-    // Configurar los parámetros para enviar la imagen al bucket
     const params = {
-      //Bucket: s3.bucketName, //Nombre del bucket
-      Key: `${nameImage}.png`, // El nombre que quieres darle a la imagen en S3 | Puedo enviar el nombre con la imagen en body
-      Body: blobImage,
-      ContentType: 'image/png' // El tipo de contenido de la imagen
+      Bucket: AWS_BUCKET_NAME,
+      Key: "Agumon.png",
     };
 
-    // Enviar la imagen al bucket
-    s3.upload(params, function (err, data) {
-      if (err) {
-        // Enviar un mensaje de error al cliente si hubo un problema
-        return res.status(500).send(err);
-      }
+    const command = new GetObjectCommand(params);
 
-      // Enviar una respuesta al cliente indicando que la imagen se ha subido correctamente
-      res.send({ message: 'Imagen subida correctamente' });
+    s3.send(command).then((data) => {
+      console.log(`El archivo se ha descargado exitosamente`);
+      //console.log(data); // El contenido del archivo se encuentra en la propiedad Body del objeto de respuesta.
+      console.log(typeof data);
+      const imagen = data.Body;
+
+      const pasarString = JSON.stringify(imagen);
+      const blobIMG = new Blob([pasarString]);
+
+      //envio al cliente
+      //res.setHeader('Content-Type', 'image/png');
+      //res.send(data.Body);
+
+    }).catch((err) => {
+      console.log(err);
     });
 
+  
+
   }
-  catch (err) {
+  catch (err){
     console.error(err);
   }
+
 };
-*/
+
+
+
 
 module.exports = controller;

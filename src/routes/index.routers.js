@@ -14,5 +14,8 @@ router.post('/add-digimon-to-BD', controller.addDigimonsToBD);
 // POST PARA ENVIAR LAS IMAGENES A AWS
 router.post('/images-to-AWS', controller.sendImagesToAWS);
 
+//GET PARA RECIBIR IMAGENES DE AWS
+router.get('/images-from-AWS', controller.getImagesToAWS);
+
 
 module.exports = router;
