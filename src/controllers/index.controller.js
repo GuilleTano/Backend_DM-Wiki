@@ -63,7 +63,7 @@ controller.sendImagesToAWS = async (req, res) => {
   try {
 
     // Obtiene el nombre del archivo y el contenido del archivo a partir de la petición
-    const fileName = "Agumon.png";
+    const fileName = "Agumon.png"; //req.name;
     const fileBlob = req.body;
 
     // Convierte el objeto blob a un string
@@ -80,6 +80,7 @@ controller.sendImagesToAWS = async (req, res) => {
       Body: fileBuffer
     };
 
+    //Se crea instancia de PutObjectCommand para utilizarla en el metodo send() de s3
     const command = new PutObjectCommand(params);
 
     s3.send(command, function(err, data) {
@@ -114,8 +115,11 @@ controller.getImagesToAWS = async (req, res) => {
       console.log(typeof data);
       const imagen = data.Body;
 
-      const pasarString = JSON.stringify(imagen);
-      const blobIMG = new Blob([pasarString]);
+      console.log(imagen);
+
+
+      //const pasarString = JSON.stringify(imagen);
+      //const blobIMG = new Blob([pasarString]);
 
       //envio al cliente
       //res.setHeader('Content-Type', 'image/png');
