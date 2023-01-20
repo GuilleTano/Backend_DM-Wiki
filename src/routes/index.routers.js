@@ -3,7 +3,9 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/index.controller");
-
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({storage});
 
 // GET INDEX
 router.get("/", controller.index);
@@ -12,7 +14,7 @@ router.get("/", controller.index);
 router.post('/add-digimon-to-BD', controller.addDigimonsToBD);
 
 // POST PARA ENVIAR LAS IMAGENES A AWS
-router.post('/images-to-AWS', controller.sendImagesToAWS);
+router.post('/images-to-AWS',  upload.single("file"), controller.sendImagesToAWS);
 
 //GET PARA RECIBIR IMAGENES DE AWS
 router.get('/images-from-AWS', controller.getImagesToAWS);

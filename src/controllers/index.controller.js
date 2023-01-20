@@ -6,6 +6,7 @@ const controller = {};
 const connection = require("../dbConnection/connection");
 const DigiModel = require("../models/digimon.model");
 const s3 = require("../s3config/s3connection") //Llamar a la conexion con s3
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
 const { GetObjectCommand } = require('@aws-sdk/client-s3');
@@ -64,28 +65,26 @@ controller.sendImagesToAWS = async (req, res) => {
 
     // Obtiene el nombre del archivo y el contenido del archivo a partir de la request del cliente
     const fileName = "Agumon.png"; //req.name;
-    const fileBlob = req.body;
+    const fileBlob = req.file;
+    
 
-    // Convierte el objeto blob a un string
-    //const fileBlobString = JSON.stringify(fileBlob);
-    // Crea un buffer a partir del string del blob
-    //const fileBuffer = Buffer.from(fileBlobString);
+    //console.log(fileBlob);
+
     //console.log(fileBuffer);
-
-    const arrayBuffer = await new Response(fileBlob).arrayBuffer();
-    const fileBuffer = Buffer.from(arrayBuffer);
-
-
+    
     // Prepara los parámetros para la subida del archivo a S3
     const params = {
       Bucket: AWS_BUCKET_NAME,
       Key: fileName,
-      Body: fileBuffer
+      ContentType: fileBlob.mimetype,
+      Body: fileBlob.buffer
     };
 
     //Se crea instancia de PutObjectCommand para utilizarla en el metodo send() de s3
     const command = new PutObjectCommand(params);
 
+
+    
     s3.send(command, function(err, data) {
       if (err) {
         console.log('Error', err);
@@ -94,6 +93,8 @@ controller.sendImagesToAWS = async (req, res) => {
         console.log('Subido correctamente');
       }
     });
+    
+
 
   }
   catch (err) {
@@ -111,27 +112,9 @@ controller.getImagesToAWS = async (req, res) => {
 
     const command = new GetObjectCommand(params);
 
-    s3.send(command).then((data) => {
-      console.log(`El archivo se ha descargado exitosamente`);
-      //console.log(data); // El contenido del archivo se encuentra en la propiedad Body del objeto de respuesta.
-      console.log(typeof data);
-      const imagen = data;
+    const url = await getSignedUrl(s3, command, {expiresIn: 3600});
 
-      const blobIMG = new Blob([imagen]);
-
-      //const buffer = data;
-      //const blobIMG = new Blob([Buffer.from(buffer)], {type: 'image/png'});
-
-
-      console.log(blobIMG);
-
-      //envio al cliente
-      res.setHeader('Content-Type', 'image/png');
-      res.send(blobIMG);
-
-    }).catch((err) => {
-      console.log(err);
-    });
+    res.json({url, ok:true});
 
   }
   catch (err){
