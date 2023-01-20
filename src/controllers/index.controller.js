@@ -62,16 +62,19 @@ controller.addDigimonsToBD = async (req, res) => {
 controller.sendImagesToAWS = async (req, res) => {
   try {
 
-    // Obtiene el nombre del archivo y el contenido del archivo a partir de la petición
+    // Obtiene el nombre del archivo y el contenido del archivo a partir de la request del cliente
     const fileName = "Agumon.png"; //req.name;
     const fileBlob = req.body;
 
     // Convierte el objeto blob a un string
-    const fileBlobString = JSON.stringify(fileBlob);
-
-    // Crea un buffer a partir del blob
-    const fileBuffer = Buffer.from(fileBlobString);
+    //const fileBlobString = JSON.stringify(fileBlob);
+    // Crea un buffer a partir del string del blob
+    //const fileBuffer = Buffer.from(fileBlobString);
     //console.log(fileBuffer);
+
+    const arrayBuffer = await new Response(fileBlob).arrayBuffer();
+    const fileBuffer = Buffer.from(arrayBuffer);
+
 
     // Prepara los parámetros para la subida del archivo a S3
     const params = {
@@ -99,7 +102,6 @@ controller.sendImagesToAWS = async (req, res) => {
 };
 
 controller.getImagesToAWS = async (req, res) => {
-
   try{
 
     const params = {
@@ -113,23 +115,23 @@ controller.getImagesToAWS = async (req, res) => {
       console.log(`El archivo se ha descargado exitosamente`);
       //console.log(data); // El contenido del archivo se encuentra en la propiedad Body del objeto de respuesta.
       console.log(typeof data);
-      const imagen = data.Body;
+      const imagen = data;
 
-      console.log(imagen);
+      const blobIMG = new Blob([imagen]);
+
+      //const buffer = data;
+      //const blobIMG = new Blob([Buffer.from(buffer)], {type: 'image/png'});
 
 
-      //const pasarString = JSON.stringify(imagen);
-      //const blobIMG = new Blob([pasarString]);
+      console.log(blobIMG);
 
       //envio al cliente
-      //res.setHeader('Content-Type', 'image/png');
-      //res.send(data.Body);
+      res.setHeader('Content-Type', 'image/png');
+      res.send(blobIMG);
 
     }).catch((err) => {
       console.log(err);
     });
-
-  
 
   }
   catch (err){
