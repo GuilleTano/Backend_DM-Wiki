@@ -64,13 +64,8 @@ controller.sendImagesToAWS = async (req, res) => {
   try {
 
     // Obtiene el nombre del archivo y el contenido del archivo a partir de la request del cliente
-    const fileName = "Agumon.png"; //req.name;
+    const fileName = req.body.fileName; //req.name;
     const fileBlob = req.file;
-    
-
-    //console.log(fileBlob);
-
-    //console.log(fileBuffer);
     
     // Prepara los parámetros para la subida del archivo a S3
     const params = {
@@ -83,8 +78,6 @@ controller.sendImagesToAWS = async (req, res) => {
     //Se crea instancia de PutObjectCommand para utilizarla en el metodo send() de s3
     const command = new PutObjectCommand(params);
 
-
-    
     s3.send(command, function(err, data) {
       if (err) {
         console.log('Error', err);
@@ -94,8 +87,6 @@ controller.sendImagesToAWS = async (req, res) => {
       }
     });
     
-
-
   }
   catch (err) {
     console.error(err);
