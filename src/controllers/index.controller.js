@@ -1,5 +1,4 @@
 // FUNCIONALIDAD CUANDO USUARIO SE CONECTA A ESA RUTA
-
 // PARA CORRER EL SERVIDOR EL COMANDO ES:  npm run dev
 
 const controller = {};
@@ -7,13 +6,12 @@ const connection = require("../dbConnection/connection");
 const DigiModel = require("../models/digimon.model");
 const s3 = require("../s3config/s3connection") //Llamar a la conexion con s3
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
 const { GetObjectCommand } = require('@aws-sdk/client-s3');
-
 const fs = require('fs');
 require("dotenv").config();
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME
+
 
 controller.index = async (req, res) =>{
 
@@ -59,7 +57,6 @@ controller.addDigimonsToBD = async (req, res) => {
     }
 };
 
-
 controller.sendImagesToAWS = async (req, res) => {
   try {
 
@@ -95,10 +92,13 @@ controller.sendImagesToAWS = async (req, res) => {
 
 controller.getImagesToAWS = async (req, res) => {
   try{
+    const digiName = req.params.name + ".png";
+
+    console.log(digiName);
 
     const params = {
       Bucket: AWS_BUCKET_NAME,
-      Key: "Agumon.png",
+      Key: digiName,
     };
 
     const command = new GetObjectCommand(params);
@@ -113,8 +113,6 @@ controller.getImagesToAWS = async (req, res) => {
   }
 
 };
-
-
 
 
 module.exports = controller;
