@@ -1,5 +1,4 @@
 // FUNCIONALIDAD CUANDO USUARIO SE CONECTA A ESA RUTA
-// PARA CORRER EL SERVIDOR EL COMANDO ES:  npm run dev
 
 const controller = {};
 const connection = require("../dbConnection/connection");
@@ -62,7 +61,7 @@ controller.sendImagesToAWS = async (req, res) => {
 
     console.log('Recibido');
     // Obtiene el nombre del archivo y el contenido del archivo a partir de la request del cliente
-    const fileName = req.body.fileName; //req.name;
+    const fileName = req.body.fileName;
     const fileBlob = req.file;
     
     // Prepara los parámetros para la subida del archivo a S3
@@ -91,7 +90,7 @@ controller.sendImagesToAWS = async (req, res) => {
   }
 };
 
-controller.getImagesToAWS = async (req, res) => {
+controller.getImagesFromAWS = async (req, res) => {
   try{
     const digiName = req.params.name + ".png";
 

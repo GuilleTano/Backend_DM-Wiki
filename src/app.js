@@ -3,15 +3,12 @@
 const { Router } = require("express");
 const express = require("express");
 const cors = require("cors");
-
+const routes = require("./routes/index.routers"); // Direccion de las rutas del servidor
 const app = express();
+
+
 app.use(cors());
 app.use(express.json());
-
-
-
-// ROUTES
-const routes = require("./routes/index.routers");
 app.use(routes);
 
 
