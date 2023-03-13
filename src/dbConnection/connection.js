@@ -1,7 +1,9 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 
-const password = "MVNJBjhemE80wq6c";
-const uri = `mongodb+srv://guille_atlas_03:${password}@cluster0.bqtubmo.mongodb.net/?retryWrites=true&w=majority`;
+
+const MONGODB_PASS = process.env.MONGODB_PASS;
+const uri = `mongodb+srv://guille_atlas_03:${MONGODB_PASS}@cluster0.bqtubmo.mongodb.net/?retryWrites=true&w=majority`;
 const options = {dbName: "digipedia"};
 
 

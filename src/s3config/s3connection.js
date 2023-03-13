@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const { S3Client } = require('@aws-sdk/client-s3');
 
 //const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME
