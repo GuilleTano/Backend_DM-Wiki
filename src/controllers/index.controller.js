@@ -60,7 +60,7 @@ controller.sendImagesToAWS = async (req, res) => {
   try {
 
     console.log('Recibido');
-    // Obtiene el nombre del archivo y el contenido del archivo a partir de la request del cliente
+    // Obtiene el nombre del archivo y el contenido del archivo a partir de la request del cliente 
     const fileName = req.body.fileName;
     const fileBlob = req.file;
     
