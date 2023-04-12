@@ -18,7 +18,7 @@ controller.index = async (req, res) => {
 
     console.log(allDigimons);
 
-    res.send("<h1>Servidor corriendo</h1>");
+    res.send(`<body style="background-color: black;"><h1 style="color: white;">Servidor corriendo</h1></body>`);
   } catch (err) {
     console.error(err);
   }
@@ -62,7 +62,7 @@ controller.sendImagesToAWS = async (req, res) => {
     const fileName = req.body.fileName;
     const fileBlob = req.file;
 
-    // Prepara los parámetros para la subida del archivo a S3
+    // Prepara los parámetros para la subida del archivo a S3 
     const params = {
       Bucket: AWS_BUCKET_NAME,
       Key: fileName,

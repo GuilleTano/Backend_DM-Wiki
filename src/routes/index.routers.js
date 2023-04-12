@@ -8,6 +8,7 @@ const upload = multer({
     limits: {fileSize: 5 * 1024 * 1024} //5MB 
 });
 
+
 // GET INDEX
 router.get("/", controller.index);
 
@@ -15,7 +16,7 @@ router.get("/", controller.index);
 router.post('/add-digimon-to-BD', controller.addDigimonsToBD);
 
 // POST PARA ENVIAR LAS IMAGENES A AWS
-router.post('/images-to-AWS',  upload.single("file"), controller.sendImagesToAWS);
+router.post('/images-to-AWS', upload.single("file"), controller.sendImagesToAWS);
 
 //GET PARA RECIBIR IMAGENES DE AWS
 router.get('/images-from-AWS/:name', controller.getImagesFromAWS);
