@@ -30,7 +30,7 @@ controller.index = async (req, res) => {
 controller.addDigimonToBD = async (req, res) => {
   try {
     const { name, id, xAntibody, releaseDate, image, levels, fields,
-      attributes, description, skills, types, priorEvolutions, nextEvolutions } = req.body;
+      attributes, descriptions, skills, types, priorEvolutions, nextEvolutions } = req.body;
     const newDigimon = {
       name: name,
       id: id,
@@ -41,7 +41,7 @@ controller.addDigimonToBD = async (req, res) => {
       levels: levels,
       fields: fields,
       attributes: attributes,
-      description: description,
+      descriptions: descriptions,
       skills: skills,
       priorEvolutions: priorEvolutions,
       nextEvolutions: nextEvolutions
@@ -59,13 +59,11 @@ controller.addDigimonToBD = async (req, res) => {
 
 controller.getDigimonFromBD = async (req, res) =>{
   try {
-
-    //const digiName = req.params.name;
-    
     await connection();
     const digimon = await DigiModel.findOne({ name: req.params.name });
 
-    // Una vez obtenido el digimon hay que enviarlo al cliente
+    res.json(digimon);
+    console.log("Digimon enviado");
 
   } catch (err) {
     console.error(err);

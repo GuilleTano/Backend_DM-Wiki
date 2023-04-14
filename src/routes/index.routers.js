@@ -16,7 +16,7 @@ router.get("/", controller.index);
 router.post('/add-digimon-to-BD', controller.addDigimonToBD);
 
 // GET PARA PEDIR UN DIGIMON A LA BD
-router.post('/get-digimon-to-BD/:name', controller.getDigimonFromBD);
+router.get('/get-digimon-from-BD/:name', controller.getDigimonFromBD);
 
 // POST PARA ENVIAR LAS IMAGENES A AWS
 router.post('/images-to-AWS', upload.single("file"), controller.sendImagesToAWS);

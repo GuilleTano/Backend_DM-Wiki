@@ -32,7 +32,7 @@ const DigiSchema = new Schema({
         id: Number,
         attribute: String
     }],
-    description: [{
+    descriptions: [{
         origin: String,
         language: String,
         description: String
