@@ -13,7 +13,10 @@ const upload = multer({
 router.get("/", controller.index);
 
 // POST PARA AGREGAR LOS DIGIMON A LA BD
-router.post('/add-digimon-to-BD', controller.addDigimonsToBD);
+router.post('/add-digimon-to-BD', controller.addDigimonToBD);
+
+// GET PARA PEDIR UN DIGIMON A LA BD
+router.post('/get-digimon-to-BD/:name', controller.getDigimonFromBD);
 
 // POST PARA ENVIAR LAS IMAGENES A AWS
 router.post('/images-to-AWS', upload.single("file"), controller.sendImagesToAWS);

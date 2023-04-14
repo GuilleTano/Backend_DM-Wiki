@@ -5,26 +5,29 @@ const s3 = require("../s3config/s3connection") //Llamar a la conexion con s3
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
 const { GetObjectCommand } = require('@aws-sdk/client-s3');
-const fs = require('fs');
 require("dotenv").config();
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME
 
 
 controller.index = async (req, res) => {
-
   try {
     await connection();
     const allDigimons = await DigiModel.find();
 
-    console.log(allDigimons);
-
-    res.send(`<body style="background-color: black;"><h1 style="color: white;">Servidor corriendo</h1></body>`);
+    console.log("Objetos en BD: " + allDigimons.length);
+    res.send(`<body style="background-color: black;">
+    <h1 style="color: white;">Servidor corriendo</h1>
+    <h3 style="color: white;">Hay ${allDigimons.length} digimons en MongoDB</h3>
+    </body>`);
   } catch (err) {
     console.error(err);
   }
 }
 
-controller.addDigimonsToBD = async (req, res) => {
+
+// MONGO DB CONTROLLERS:
+
+controller.addDigimonToBD = async (req, res) => {
   try {
     const { name, id, xAntibody, releaseDate, image, levels, fields,
       attributes, description, skills, types, priorEvolutions, nextEvolutions } = req.body;
@@ -53,6 +56,25 @@ controller.addDigimonsToBD = async (req, res) => {
     console.error(err);
   }
 };
+
+controller.getDigimonFromBD = async (req, res) =>{
+  try {
+
+    //const digiName = req.params.name;
+    
+    await connection();
+    const digimon = await DigiModel.findOne({ name: req.params.name });
+
+    // Una vez obtenido el digimon hay que enviarlo al cliente
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
+
+// AWS CONTROLLERS:
 
 controller.sendImagesToAWS = async (req, res) => {
   try {
@@ -87,8 +109,6 @@ controller.sendImagesToAWS = async (req, res) => {
     console.error(err);
   }
 };
-
-
 
 controller.getImagesFromAWS = async (req, res) => {
   try {
