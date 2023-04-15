@@ -19,7 +19,6 @@ const DigiSchema = new Schema({
           required: true
         }
       }],
-    image: String,
     levels:[{
         id: Number,
         level: String

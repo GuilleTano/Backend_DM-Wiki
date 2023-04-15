@@ -26,10 +26,10 @@ controller.index = async (req, res) => {
 
 
 // MONGO DB CONTROLLERS:
-
-controller.addDigimonToBD = async (req, res) => {
+let i = 0;
+controller.addDigimonToBD = async (req, res, next) => {
   try {
-    const { name, id, xAntibody, releaseDate, image, levels, fields,
+    const { name, id, xAntibody, releaseDate, levels, fields,
       attributes, descriptions, skills, types, priorEvolutions, nextEvolutions } = req.body;
     const newDigimon = {
       name: name,
@@ -37,7 +37,6 @@ controller.addDigimonToBD = async (req, res) => {
       types: types,
       xAntibody: xAntibody,
       releaseDate: releaseDate,
-      image: image,
       levels: levels,
       fields: fields,
       attributes: attributes,
@@ -46,30 +45,40 @@ controller.addDigimonToBD = async (req, res) => {
       priorEvolutions: priorEvolutions,
       nextEvolutions: nextEvolutions
     };
+
     await connection();
+    const digimon = await DigiModel.findOne({ name: newDigimon.name });
+    if(digimon){
+      console.log("El Digimon ya existe");
+      return res.status(200).json({ message: 'El Digimon ya existe' });
+    }
+
     await DigiModel.create(newDigimon);
-
-    console.log("Se cargo el Digimon");
-    //res.redirect('/')
-
+    i++
+    console.log("Digimon cargados a DB: " + i);
+    return res.status(200).json({ message: 'El Digimon se agregó correctamente' });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ error: 'No se pudo procesar la solicitud' });
   }
 };
 
-controller.getDigimonFromBD = async (req, res) =>{
+controller.getDigimonFromBD = async (req, res) => {
   try {
     await connection();
     const digimon = await DigiModel.findOne({ name: req.params.name });
 
-    res.json(digimon);
-    console.log("Digimon enviado");
+    if(!digimon){
+      return res.status(200).json({ message: 'El Digimon no existe' });
+    }
 
+    console.log("Digimon enviado");
+    return res.json(digimon);
   } catch (err) {
     console.error(err);
+    res.status(500).json({ error: 'No se pudo procesar la solicitud' });
   }
 }
-
 
 
 // AWS CONTROLLERS:
@@ -102,9 +111,11 @@ controller.sendImagesToAWS = async (req, res) => {
       }
     });
 
+    res.status(200).json({ message: 'La imagen se agregó correctamente' });
   }
   catch (err) {
     console.error(err);
+    res.status(500).json({ error: 'No se pudo procesar la solicitud' });
   }
 };
 
@@ -112,7 +123,7 @@ controller.getImagesFromAWS = async (req, res) => {
   try {
     const digiName = req.params.name + ".png";
 
-    console.log(digiName);
+    console.log("Imagen enviada: " + digiName);
 
     const params = {
       Bucket: AWS_BUCKET_NAME,
@@ -120,14 +131,12 @@ controller.getImagesFromAWS = async (req, res) => {
     };
 
     const command = new GetObjectCommand(params);
-
     const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-
     res.json({ url, ok: true });
-
   }
   catch (err) {
     console.error(err);
+    res.status(500).json({ error: 'No se pudo procesar la solicitud' });
   }
 
 };
