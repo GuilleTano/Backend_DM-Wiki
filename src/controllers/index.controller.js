@@ -12,12 +12,11 @@ const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME
 controller.index = async (req, res) => {
   try {
     await connection();
-    const allDigimons = await DigiModel.find();
+    //const allDigimons = await DigiModel.find();
 
-    console.log("Objetos en BD: " + allDigimons.length);
+    //console.log("Objetos en BD: " + allDigimons.length);
     res.send(`<body style="background-color: black;">
     <h1 style="color: white;">Servidor corriendo</h1>
-    <h3 style="color: white;">Hay ${allDigimons.length} digimons en MongoDB</h3>
     </body>`);
   } catch (err) {
     console.error(err);
