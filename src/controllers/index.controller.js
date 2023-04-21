@@ -1,32 +1,51 @@
 const controller = {};
-const connection = require("../dbConnection/connection");
+const connectionDB = require("../dbConnection/connection");
 const DigiModel = require("../models/digimon.model");
 const s3 = require("../s3config/s3connection") //Llamar a la conexion con s3
+//const fs = require('fs');
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
 const { GetObjectCommand } = require('@aws-sdk/client-s3');
+//const { ListObjectsCommand } = require("@aws-sdk/client-s3");
 require("dotenv").config();
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME
 
 
 controller.index = async (req, res) => {
   try {
-    await connection();
+    await connectionDB();
     //const allDigimons = await DigiModel.find();
 
-    //console.log("Objetos en BD: " + allDigimons.length);
-    res.send(`<body style="background-color: black;">
-    <h1 style="color: white;">Servidor corriendo</h1>
-    </body>`);
+    /*// Creacion de JSON con lista de nombres
+    const digimonNames = await DigiModel.find({}, { _id: 0, name: 1 }).lean();
+    console.log("mongo: " + digimonNames.length);
+
+    const objectList = digimonNames.map((obj) => ({
+      nameLowercase: obj.name.toLowerCase(),      //agumon (black)
+      s3ImageName: obj.name.replace(/\s/g, '_'),  //Agumon_(Black)
+      mongoName: obj.name,                        //Agumon (Black)
+    }));
+
+    // Guardar la lista de objetos en un archivo JSON
+    fs.writeFileSync('objectList.json', JSON.stringify(objectList));
+
+    //Verificar cantidad de objetos en JSON
+    const rawData = fs.readFileSync('objectList.json');
+    const cantidad = JSON.parse(rawData);
+    console.log(`La cantidad de objetos en el JSON es ${cantidad.length}`);
+    */
+
+    res.send(`<body style="background-color: black;"><h1 style="color: white;">Servidor corriendo</h1></body>`);
   } catch (err) {
     console.error(err);
+    res.status(500).send('Error al conectar a la base de datos');
   }
 }
 
 
 // MONGO DB CONTROLLERS:
-let i = 0;
 controller.addDigimonToBD = async (req, res, next) => {
+  let i = 0;
   try {
     const { name, id, xAntibody, releaseDate, levels, fields,
       attributes, descriptions, skills, types, priorEvolutions, nextEvolutions } = req.body;
@@ -45,9 +64,9 @@ controller.addDigimonToBD = async (req, res, next) => {
       nextEvolutions: nextEvolutions
     };
 
-    await connection();
+    await connectionDB();
     const digimon = await DigiModel.findOne({ name: newDigimon.name });
-    if(digimon){
+    if (digimon) {
       console.log("El Digimon ya existe");
       return res.status(200).json({ message: 'El Digimon ya existe' });
     }
@@ -64,10 +83,10 @@ controller.addDigimonToBD = async (req, res, next) => {
 
 controller.getDigimonFromBD = async (req, res) => {
   try {
-    await connection();
+    await connectionDB();
     const digimon = await DigiModel.findOne({ name: req.params.name });
 
-    if(!digimon){
+    if (!digimon) {
       return res.status(200).json({ message: 'El Digimon no existe' });
     }
 
@@ -81,7 +100,6 @@ controller.getDigimonFromBD = async (req, res) => {
 
 
 // AWS CONTROLLERS:
-
 controller.sendImagesToAWS = async (req, res) => {
   try {
     console.log('Recibido');
@@ -122,7 +140,7 @@ controller.getImagesFromAWS = async (req, res) => {
   try {
     const digiName = req.params.name + ".png";
 
-    console.log("Imagen enviada: " + digiName);
+    console.log("Imagen solicitada: " + digiName);
 
     const params = {
       Bucket: AWS_BUCKET_NAME,
