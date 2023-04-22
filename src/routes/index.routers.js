@@ -12,6 +12,8 @@ const upload = multer({
 // GET INDEX
 router.get("/", controller.index);
 
+router.get("/digimon-list", controller.digimonList);
+
 // POST PARA AGREGAR LOS DIGIMON A LA BD
 router.post('/add-digimon-to-BD', controller.addDigimonToBD);
 
