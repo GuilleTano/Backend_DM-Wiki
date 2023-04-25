@@ -9,7 +9,6 @@ const { GetObjectCommand } = require('@aws-sdk/client-s3');
 //const { ListObjectsCommand } = require("@aws-sdk/client-s3");
 require("dotenv").config();
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME
-
 const listaD = require("../../objectList.json");
 
 controller.index = async (req, res) => {
@@ -44,7 +43,6 @@ controller.index = async (req, res) => {
 }
 
 controller.digimonList = async (req, res) => {
-
   try {
     console.log("Se envia la lista");
 
@@ -53,7 +51,6 @@ controller.digimonList = async (req, res) => {
     console.error(err);
     res.status(500).send('Error al enviar la lista');
   }
-
 }
 
 
