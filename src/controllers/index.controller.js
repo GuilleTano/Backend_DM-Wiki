@@ -34,7 +34,7 @@ controller.index = async (req, res) => {
     const cantidad = JSON.parse(rawData);
     console.log(`La cantidad de objetos en el JSON es ${cantidad.length}`);
     */
-
+    
     res.send(`<body style="background-color: black;"><h1 style="color: white;">Servidor corriendo</h1></body>`);
   } catch (err) {
     console.error(err);
@@ -98,7 +98,7 @@ controller.getDigimonFromBD = async (req, res) => {
     const digimon = await DigiModel.findOne({ name: req.params.name });
 
     if (!digimon) {
-      return res.status(200).json({ message: 'El Digimon no existe' });
+      return res.status(200).json({ message: 'El Digimon' + digimon + 'no existe' });
     }
 
     console.log("Digimon enviado");
