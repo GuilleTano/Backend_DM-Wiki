@@ -1,8 +1,9 @@
 const { Router } = require("express");
 const express = require("express");
 const cors = require("cors");
-const routes = require("./routes/index.routers"); // Direccion de las rutas del servidor
-//const app = express();
+const indexRoutes = require("./routes/index.routers");
+const mongoRoutes = require("./routes/mongoDB.routers");
+const awsRoutes = require("./routes/aws.routers");
 
 const http = require('http');
 const agent = new http.Agent({ maxSockets: 20 });
@@ -12,15 +13,11 @@ server.timeout = 10000;
 
 app.use(cors());
 app.use(express.json());
-app.use(routes);
+app.use(indexRoutes);
+app.use(mongoRoutes);
+app.use(awsRoutes);
 
 
 server.listen(3000, () => {
     console.log('Servidor iniciado en el puerto 3000');
 });
-
-
-/*app.listen(3000, ()=>{
-    console.log("Escuchando a http://localhost:3000");
-});
-*/
