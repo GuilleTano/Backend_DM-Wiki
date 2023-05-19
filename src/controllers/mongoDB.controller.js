@@ -65,15 +65,18 @@ controller.getPriorEvoNull = async (req, res) => {
         await connectionDB();
 
         const docs = await DigiModel.find({ 'priorEvolutions': { $elemMatch: { id: null } } }).exec();
+        //const docs = await DigiModel.find({ 'priorEvolutions': { $elemMatch: { id: null, digimon:"Amano Nene" } } }).exec();
 
         console.log(docs.length);
-        //console.log(docs[1].priorEvolutions);
 
-        
-        /* Con esto remplazamos todos los Digitama con ID null a ID 1500 (Falta agregar imagen de Digitama)
-        const filter = { 'priorEvolutions.id': null, 'priorEvolutions.digimon': 'Digitama' };
-        const update = { $set: { 'priorEvolutions.$[elem].id': 1500 } };
-        const options = { arrayFilters: [ { 'elem.id': null, 'elem.digimon': 'Digitama' } ] };
+        // Con esto modifico todos los Digitama con ID null a el ID o dato que quiera
+        /*
+        const filter = { 'priorEvolutions.id': null, 'priorEvolutions.digimon': 'Amano Nene' };
+        const update = { $set: { 
+            'priorEvolutions.$[elem].id': 1433,
+            'priorEvolutions.$[elem].digimon': 'Amano Nene'
+        } };
+        const options = { arrayFilters: [ { 'elem.id': null ,'elem.digimon': 'Amano Nene' } ] };
         const result = await DigiModel.updateMany(filter, update, options);
         console.log(result.nModified + ' documents updated');
         */
@@ -84,6 +87,34 @@ controller.getPriorEvoNull = async (req, res) => {
     }
 }
 
+controller.getNextEvoNull = async (req, res) => {
+    try {
+        await connectionDB();
+
+        const docs = await DigiModel.find({ 'nextEvolutions': { $elemMatch: { id: null } } }).exec();
+        //const docs = await DigiModel.find({ 'nextEvolutions': { $elemMatch: { id: null, digimon:"Minotarumon Adult" } } }).exec();
+
+        console.log(docs.length);
+
+        //console.log(docs[0].name);
+
+        // Con esto modifico todos los Digitama con ID null a el ID o dato que quiera
+        /*
+        const filter = { 'nextEvolutions.id': null, 'nextEvolutions.digimon': 'Xros Up Opossummon' };
+        const update = { $set: { 
+            'nextEvolutions.$[elem].id': 305,
+            'nextEvolutions.$[elem].digimon': 'Xros Up Opossummon (Candmon)'
+        } };
+        const options = { arrayFilters: [ { 'elem.id': null ,'elem.digimon': 'Xros Up Opossummon' } ] };
+        const result = await DigiModel.updateMany(filter, update, options);
+        console.log(result.nModified + ' documents updated');
+        */
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'No se pudo procesar la solicitud' });
+    }
+}
 
 
 

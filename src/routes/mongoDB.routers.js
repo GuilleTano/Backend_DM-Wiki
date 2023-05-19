@@ -11,5 +11,7 @@ router.get('/get-digimon-from-BD/:name', controllerDB.getDigimonFromBD);
 
 router.get('/get-prioEvo-nullID', controllerDB.getPriorEvoNull);
 
+router.get('/get-nextEvo-nullID', controllerDB.getNextEvoNull);
+
 
 module.exports = router;
