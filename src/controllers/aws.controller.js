@@ -7,6 +7,7 @@ const { GetObjectCommand } = require('@aws-sdk/client-s3');
 require("dotenv").config();
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 
+const myCache = require("../myCache/myCache");
 
 controller.sendImagesToAWS = async (req, res) => {
     try {
@@ -48,16 +49,27 @@ controller.getImagesFromAWS = async (req, res) => {
     try {
         const digiName = req.params.name + ".png";
 
-        console.log("Imagen solicitada: " + digiName);
+        // Primero se revisa el cache de imagenes
+        const imgCache = myCache.getImgCache(digiName);
+        if (imgCache){
+            const url = imgCache
+            return res.json({ url, ok: true });
+        }
 
+        //console.log("Imagen solicitada a AWS: " + digiName);
+
+        // Si la imagen no existe en cache, se solicita a AWS
         const params = {
             Bucket: AWS_BUCKET_NAME,
             Key: digiName,
         };
-
         const command = new GetObjectCommand(params);
         const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-        res.json({ url, ok: true });
+
+        // Y aqui se guarda en el cache
+        myCache.saveImgCache(digiName, url);
+
+        return res.json({ url, ok: true });
     }
     catch (err) {
         console.error(err);
