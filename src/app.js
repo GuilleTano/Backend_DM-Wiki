@@ -4,6 +4,7 @@ const cors = require("cors");
 const indexRoutes = require("./routes/index.routers");
 const mongoRoutes = require("./routes/mongoDB.routers");
 const awsRoutes = require("./routes/aws.routers");
+const port = process.env.PORT || 3000;
 
 const http = require('http');
 const agent = new http.Agent({ maxSockets: 20 });
@@ -18,6 +19,6 @@ app.use(mongoRoutes);
 app.use(awsRoutes);
 
 
-server.listen(3000, () => {
-    console.log('Servidor iniciado en el puerto 3000');
+server.listen(port, () => {
+    console.log(`Servidor iniciado en el puerto ${port}`);
 });
