@@ -4,6 +4,7 @@ const cors = require("cors");
 const indexRoutes = require("./routes/index.routers");
 const mongoRoutes = require("./routes/mongoDB.routers");
 const awsRoutes = require("./routes/aws.routers");
+require("dotenv").config();
 const port = process.env.PORT || 3000;
 
 const http = require('http');

@@ -1,5 +1,4 @@
 const controller = {};
-require("dotenv").config();
 const listaD = require("../../objectList.json");
 
 
