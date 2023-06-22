@@ -56,15 +56,13 @@ controller.getImagesFromAWS = async (req, res) => {
             return res.json({ url, ok: true });
         }
 
-        //console.log("Imagen solicitada a AWS: " + digiName);
-
         // Si la imagen no existe en cache, se solicita a AWS
         const params = {
             Bucket: AWS_BUCKET_NAME,
             Key: digiName,
         };
         const command = new GetObjectCommand(params);
-        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+        const url = await getSignedUrl(s3, command, { expiresIn: 43.200 }); //12hs = 43.200s
 
         // Y aqui se guarda en el cache
         myCache.saveImgCache(digiName, url);
@@ -75,7 +73,6 @@ controller.getImagesFromAWS = async (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'No se pudo procesar la solicitud' });
     }
-
 };
 
 

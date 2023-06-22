@@ -3,13 +3,13 @@ const imgCache = [];
 class ImgCache {
     constructor(name, url, expirationDate) {
         this.name = name,
-            this.url = url,
-            this.expirationDate = expirationDate
+        this.url = url,
+        this.expirationDate = expirationDate
     }
 }
 
 function saveImgCache(name, url) {
-    const expirationDate = Date.now() + 3600000; // 3600000 milisegundos = 1 hora
+    const expirationDate = Date.now() + 12 * 60 * 60 * 1000; // 12hs
     const newImg = new ImgCache(name, url, expirationDate);
     imgCache.push(newImg);
     console.log("Se guardó la imagen en cache");
