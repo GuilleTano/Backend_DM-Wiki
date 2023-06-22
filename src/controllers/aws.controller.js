@@ -62,7 +62,7 @@ controller.getImagesFromAWS = async (req, res) => {
             Key: digiName,
         };
         const command = new GetObjectCommand(params);
-        const url = await getSignedUrl(s3, command, { expiresIn: 43.200 }); //12hs = 43.200s
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 }); //12hs = 43.200s
 
         // Y aqui se guarda en el cache
         myCache.saveImgCache(digiName, url);

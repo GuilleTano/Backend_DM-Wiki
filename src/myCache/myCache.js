@@ -9,7 +9,7 @@ class ImgCache {
 }
 
 function saveImgCache(name, url) {
-    const expirationDate = Date.now() + 12 * 60 * 60 * 1000; // 12hs
+    const expirationDate = Date.now() + 1 * 60 * 60 * 1000; // 1hora
     const newImg = new ImgCache(name, url, expirationDate);
     imgCache.push(newImg);
     console.log("Se guardó la imagen en cache");
