@@ -4,6 +4,7 @@ const cors = require("cors");
 const indexRoutes = require("./routes/index.routers");
 const mongoRoutes = require("./routes/mongoDB.routers");
 const awsRoutes = require("./routes/aws.routers");
+const openaiRoutes = require("./routes/openai.routers");
 require("dotenv").config();
 const port = process.env.PORT || 3000;
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(indexRoutes);
 app.use(mongoRoutes);
 app.use(awsRoutes);
+app.use(openaiRoutes);
 
 
 server.listen(port, () => {
