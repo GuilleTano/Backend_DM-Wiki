@@ -17,7 +17,7 @@ function saveImgCache(name, url) {
 }
 
 function getImgCache(imageName) {
-    //Obtener el index de la img en cache para luego eliminarla si expiró
+    //Obtener el index de la img en cache para luego eliminarla si expiro
     const cachedImageIndex = imgCache.findIndex(img => img.name === imageName);
     if (cachedImageIndex !== -1) {
         const cachedImage = imgCache[cachedImageIndex];
