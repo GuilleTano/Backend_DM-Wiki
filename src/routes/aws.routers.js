@@ -8,9 +8,8 @@ const upload = multer({
     limits: {fileSize: 5 * 1024 * 1024} //5MB 
 });
 
-
 // POST PARA ENVIAR LAS IMAGENES A AWS
-router.post('/images-to-AWS', upload.single("file"), controllerAWS.sendImagesToAWS);
+//router.post('/images-to-AWS', upload.single("file"), controllerAWS.sendImagesToAWS);
 
 //GET PARA RECIBIR IMAGENES DE AWS
 router.get('/images-from-AWS/:name', controllerAWS.getImagesFromAWS);
